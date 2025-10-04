@@ -7,8 +7,11 @@ import ProfileItem from "../../../components/ProfileItem";
 import ProfileSection from "../../../components/ProfileSection";
 import Colors from "../../../constants/colors";
 import SIZES from "../../../constants/sizes";
+import useHideTabBar from "../../../hooks/useHideTabBar";
 
 export default function LanguageScreen() {
+  useHideTabBar();
+
   return (
     <View style={styles.container}>
       <ProfileSection>

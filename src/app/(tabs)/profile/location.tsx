@@ -6,8 +6,11 @@ import CustomSearchInput from "../../../components/CustomSearchInput";
 import KeyboardAvoidingWrapper from "../../../components/KeyboardAvoidingWrapper";
 import Colors from "../../../constants/colors";
 import SIZES from "../../../constants/sizes";
+import useHideTabBar from "../../../hooks/useHideTabBar";
 
 export default function HomeLocationScreen() {
+  useHideTabBar();
+
   const [searchInput, setSearchInput] = useState("");
   return (
     <KeyboardAvoidingWrapper>
