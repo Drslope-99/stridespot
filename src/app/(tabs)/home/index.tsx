@@ -1,15 +1,19 @@
 import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { useRouter } from "expo-router";
 import React, { useCallback, useMemo, useRef, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomSearchInput from "../../../components/CustomSearchInput";
 import HeaderHomeComponent from "../../../components/HeaderHomeComponent";
 import HeaderNavLink from "../../../components/HeaderNavLink";
 import LineSeperator from "../../../components/LineSeperator";
 import Colors from "../../../constants/colors";
+import useGeoLocation from "../../../hooks/useGeoLocation";
 
 export default function HomeScreen() {
+  // getting the geolocation coordinates from expo-location
+  const { isLoading, location } = useGeoLocation();
+
   const [input, setInput] = useState("");
   // ref
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -33,7 +37,15 @@ export default function HomeScreen() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <View style={styles.container}></View>
+      <View style={styles.container}>
+        {isLoading ? (
+          <ActivityIndicator size="large" />
+        ) : (
+          <Text>
+            {location?.coords?.latitude} {location?.coords?.longitude}
+          </Text>
+        )}
+      </View>
       <BottomSheet
         index={1}
         snapPoints={["40%", "90%"]}
