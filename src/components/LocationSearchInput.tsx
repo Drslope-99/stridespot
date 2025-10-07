@@ -8,9 +8,10 @@ import LineSeperator from "./LineSeperator";
 type LocationSearchInputProps = {
   pickup: string;
   dropoff: string;
-  onChangePickup: (text: string) => void;
-  onChangeDropoff: (text: string) => void;
-  onSwapLocation: () => void;
+  onChangePickup?: (text: string) => void;
+  onChangeDropoff?: (text: string) => void;
+  onSwapLocation?: () => void;
+  disabled?: boolean;
 };
 
 export default function LocationSearchInput({
@@ -19,6 +20,7 @@ export default function LocationSearchInput({
   onChangePickup,
   onChangeDropoff,
   onSwapLocation,
+  disabled = false,
 }: LocationSearchInputProps) {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -33,12 +35,12 @@ export default function LocationSearchInput({
   return (
     <View style={[styles.searchContainer, isFocused && styles.inputFocus]}>
       <View style={styles.inputWrapper}>
-        <View style={styles.inputIcon}>
+        <View style={[styles.inputIcon, { backgroundColor: Colors.red400 }]}>
           <Ionicons
             name="arrow-up"
             size={SIZES.fontMd}
             color={Colors.white}
-            style={[styles.iconStyle, { backgroundColor: Colors.red400 }]}
+            style={[styles.iconStyle]}
           />
         </View>
         <TextInput
@@ -48,16 +50,17 @@ export default function LocationSearchInput({
           style={styles.searchInput}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          editable={!disabled}
         />
       </View>
       <LineSeperator color={Colors.borderColor} />
       <View style={styles.inputWrapper}>
-        <View style={styles.inputIcon}>
+        <View style={[styles.inputIcon, { backgroundColor: Colors.green400 }]}>
           <Ionicons
             name="arrow-down"
             size={SIZES.fontMd}
             color={Colors.white}
-            style={[styles.iconStyle, { backgroundColor: Colors.green400 }]}
+            style={styles.iconStyle}
           />
         </View>
         <TextInput
@@ -67,15 +70,18 @@ export default function LocationSearchInput({
           style={styles.searchInput}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          editable={!disabled}
         />
       </View>
-      <TouchableOpacity style={styles.swapIcon} onPress={onSwapLocation}>
-        <Ionicons
-          name="swap-vertical-outline"
-          size={SIZES.fontMd}
-          color={Colors.dark}
-        />
-      </TouchableOpacity>
+      {!disabled && (
+        <TouchableOpacity style={styles.swapIcon} onPress={onSwapLocation}>
+          <Ionicons
+            name="swap-vertical-outline"
+            size={SIZES.fontMd}
+            color={Colors.dark}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
@@ -94,15 +100,17 @@ const styles = StyleSheet.create({
   inputWrapper: {
     flexDirection: "row",
     width: "100%",
+    alignItems: "center",
   },
   inputIcon: {
     width: 20,
+    height: 20,
+    borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
   },
   iconStyle: {
     padding: 2,
-    borderRadius: 20,
   },
   swapIcon: {
     position: "absolute",

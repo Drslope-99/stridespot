@@ -6,7 +6,8 @@ export default function useHideTabBar() {
   const navigation = useNavigation();
 
   useLayoutEffect(() => {
-    const parent = navigation.getParent();
+    const parent =
+      navigation.getParent()?.getParent?.() || navigation.getParent();
 
     if (!parent) return;
 

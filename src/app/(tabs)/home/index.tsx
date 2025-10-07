@@ -79,7 +79,7 @@ export default function HomeScreen() {
                   color={Colors.violet400}
                   bgColor={Colors.violet50}
                   title="Send Package"
-                  onPress={() => router.push("/home/sendpackage")}
+                  onPress={() => router.push("/(tabs)/home/package")}
                 />
 
                 <HeaderNavLink

@@ -16,7 +16,7 @@ export default function HomeScrenLayout() {
       }}
     >
       <Stack.Screen name="index" options={{ title: "home" }} />
-      <Stack.Screen name="sendpackage" options={{ title: "send package" }} />
+      <Stack.Screen name="package" options={{ headerShown: false }} />
     </Stack>
   );
 }
