@@ -14,6 +14,7 @@ type PasswordProps = {
   onChangeText: (text: string) => void;
   placeholder: string;
   label?: string;
+  validate?: boolean;
 };
 
 export default function CustomPasswordInput({
@@ -21,6 +22,7 @@ export default function CustomPasswordInput({
   onChangeText,
   placeholder,
   label,
+  validate = true,
 }: PasswordProps) {
   const [visible, setVisible] = useState<boolean>(false);
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -69,7 +71,7 @@ export default function CustomPasswordInput({
         style={[
           styles.passwordWrapper,
           isFocused && styles.inputFocused,
-          error && styles.inputError,
+          validate && error && styles.inputError,
         ]}
       >
         <TextInput
@@ -94,7 +96,8 @@ export default function CustomPasswordInput({
           />
         </TouchableOpacity>
       </View>
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+      <Text style={styles.error}>{validate ? error : null}</Text>
+      {/* {error ? <Text style={styles.error}>{error}</Text> : null} */}
     </View>
   );
 }

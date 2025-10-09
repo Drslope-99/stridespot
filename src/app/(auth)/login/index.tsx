@@ -75,6 +75,7 @@ const LoginScreen = () => {
             placeholder={`Enter Password`}
             value={password}
             onChangeText={setPassword}
+            validate={false}
           />
           <Link href={"/login/reset"} style={styles.forgotLink} push>
             Forgot password?

@@ -7,6 +7,7 @@ import KeyboardAvoidingWrapper from "../../../../components/KeyboardAvoidingWrap
 import LocationSearchInput from "../../../../components/LocationSearchInput";
 import PickMapAddressBtn from "../../../../components/PickMapAddressBtn";
 import SavedLocation from "../../../../components/SavedLocation";
+import SearchLocationMapModal from "../../../../components/SearchLocationMapModal";
 import Colors from "../../../../constants/colors";
 import SIZES from "../../../../constants/sizes";
 import useHideTabBar from "../../../../hooks/useHideTabBar";
@@ -17,6 +18,7 @@ export default function SendPackageScreen() {
   const router = useRouter();
 
   const [location, setLocation] = useState({ from: "", to: "" });
+  const [showModal, setShowModal] = useState(false);
 
   const handleSwap = () => {
     setLocation(({ from, to }) => ({ from: to, to: from }));
@@ -54,6 +56,7 @@ export default function SendPackageScreen() {
           title="pick address via map"
           background={Colors.backgroundLight}
           borderCol={Colors.borderColor}
+          onPress={() => setShowModal(true)}
         />
         <SavedLocation />
         <SavedLocation />
@@ -68,6 +71,10 @@ export default function SendPackageScreen() {
             disabled={!isButtonEnabled}
           />
         </View>
+        <SearchLocationMapModal
+          visible={showModal}
+          onCloseModal={() => setShowModal(false)}
+        />
       </View>
     </KeyboardAvoidingWrapper>
   );

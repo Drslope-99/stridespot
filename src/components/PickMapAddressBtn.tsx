@@ -26,6 +26,7 @@ export default function PickMapAddressBtn({
           borderColor: borderCol || "transparent",
         },
       ]}
+      onPress={onPress}
     >
       <Ionicons name="locate" size={24} color={Colors.purple} />
       <Text style={styles.locateText}>{title}</Text>
