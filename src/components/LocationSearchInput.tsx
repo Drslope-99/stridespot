@@ -11,6 +11,7 @@ type LocationSearchInputProps = {
   onChangePickup?: (text: string) => void;
   onChangeDropoff?: (text: string) => void;
   onSwapLocation?: () => void;
+  onFocusField?: (field: "pickup" | "dropoff") => void;
   disabled?: boolean;
 };
 
@@ -20,20 +21,15 @@ export default function LocationSearchInput({
   onChangePickup,
   onChangeDropoff,
   onSwapLocation,
+  onFocusField,
   disabled = false,
 }: LocationSearchInputProps) {
-  const [isFocused, setIsFocused] = useState(false);
-
-  const handleFocus = () => {
-    setIsFocused(true);
-  };
-
-  const handleBlur = () => {
-    setIsFocused(false);
-  };
+  const [focusedField, setFocusedField] = useState<"pickup" | "dropoff" | null>(
+    null
+  );
 
   return (
-    <View style={[styles.searchContainer, isFocused && styles.inputFocus]}>
+    <View style={[styles.searchContainer, focusedField && styles.inputFocus]}>
       <View style={styles.inputWrapper}>
         <View style={[styles.inputIcon, { backgroundColor: Colors.red400 }]}>
           <Ionicons
@@ -48,8 +44,11 @@ export default function LocationSearchInput({
           value={pickup}
           onChangeText={onChangePickup}
           style={styles.searchInput}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
+          onFocus={() => {
+            setFocusedField("pickup");
+            onFocusField?.("pickup");
+          }}
+          onBlur={() => setFocusedField(null)}
           editable={!disabled}
         />
       </View>
@@ -68,8 +67,11 @@ export default function LocationSearchInput({
           value={dropoff}
           onChangeText={onChangeDropoff}
           style={styles.searchInput}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
+          onFocus={() => {
+            setFocusedField("dropoff");
+            onFocusField?.("dropoff");
+          }}
+          onBlur={() => setFocusedField(null)}
           editable={!disabled}
         />
       </View>

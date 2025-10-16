@@ -1,6 +1,6 @@
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import { useCallback, useMemo, useRef } from "react";
-import { Modal, StyleSheet, Text, View } from "react-native";
+import { useCallback, useMemo, useRef, useState } from "react";
+import { Modal, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "../constants/colors";
@@ -21,9 +21,16 @@ export default function SearchLocationMapModal({
   const insets = useSafeAreaInsets();
   const bottomSheetRef = useRef<BottomSheet>(null);
   const handleSheetChanges = useCallback((index: number) => {}, []);
+  const [locatinText, setLocationText] = useState("");
 
   //   snap points for the bottom sheets in the map
-  const snapPoints = useMemo(() => ["25%", "50%", "70%"], []);
+  const snapPoints = useMemo(() => ["50%%", "70%"], []);
+
+  // handle the text input
+  const handleInputChange = (text: string) => {
+    setLocationText(text);
+    onChangeLocation(text);
+  };
 
   return (
     <Modal
@@ -34,11 +41,7 @@ export default function SearchLocationMapModal({
     >
       <GestureHandlerRootView style={{ flex: 1 }}>
         <View style={styles.container}>
-          <View style={styles.mapContainer}>
-            <View style={[styles.searchBar, { marginTop: insets.top + 10 }]}>
-              <CustomSearchInput placeholder="type in the location keyword" />
-            </View>
-          </View>
+          <View style={styles.mapContainer}></View>
         </View>
         <BottomSheet
           ref={bottomSheetRef}
@@ -48,7 +51,13 @@ export default function SearchLocationMapModal({
           enablePanDownToClose={false}
         >
           <BottomSheetView style={styles.footerContainer}>
-            <Text>display the suggested locations</Text>
+            <View style={styles.searchBar}>
+              <CustomSearchInput
+                placeholder="type in the location keyword"
+                value={locatinText}
+                onChangeText={handleInputChange}
+              />
+            </View>
           </BottomSheetView>
         </BottomSheet>
       </GestureHandlerRootView>
@@ -68,7 +77,7 @@ const styles = StyleSheet.create({
   },
   footerContainer: {
     flex: 1,
-    padding: SIZES.spMd,
+    padding: SIZES.spSm,
   },
   searchBar: {
     width: "90%",

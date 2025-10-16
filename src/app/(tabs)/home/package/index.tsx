@@ -17,21 +17,29 @@ export default function SendPackageScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
 
-  const [location, setLocation] = useState({ from: "", to: "" });
+  const [location, setLocation] = useState({ pickup: "", dropoff: "" });
+  const [activeField, setActiveField] = useState<"pickup" | "dropoff" | null>(
+    null
+  );
   const [showModal, setShowModal] = useState(false);
 
   const handleSwap = () => {
-    setLocation(({ from, to }) => ({ from: to, to: from }));
+    if (!location.pickup || !location.dropoff) return;
+
+    setLocation(({ pickup, dropoff }) => ({
+      pickup: dropoff,
+      dropoff: pickup,
+    }));
   };
 
   const handleContinue = () => {
     Keyboard.dismiss();
-    if (location.from.trim() && location.to.trim()) {
+    if (location.pickup.trim() && location.dropoff.trim()) {
       router.push({
         pathname: "/(tabs)/home/package/packagedetails",
         params: {
-          from: location.from,
-          to: location.to,
+          from: location.pickup,
+          to: location.dropoff,
         },
       });
     } else {
@@ -40,16 +48,34 @@ export default function SendPackageScreen() {
   };
 
   const isButtonEnabled =
-    location.from.trim().length > 0 && location.to.trim().length > 0;
+    (location.pickup?.trim()?.length ?? 0) > 0 &&
+    (location.dropoff?.trim()?.length ?? 0) > 0;
+
+  const handleLocationChangeFromMap = (value: string) => {
+    if (!activeField) return;
+
+    setLocation((prev) => ({
+      ...prev,
+      [activeField]: value, // dynamically update the focused field
+    }));
+  };
 
   return (
     <KeyboardAvoidingWrapper>
       <View style={styles.container}>
         <LocationSearchInput
-          pickup={location.from}
-          dropoff={location.to}
-          onChangePickup={(text) => setLocation({ ...location, from: text })}
-          onChangeDropoff={(text) => setLocation({ ...location, to: text })}
+          pickup={location.pickup}
+          dropoff={location.dropoff}
+          onChangePickup={(text) =>
+            setLocation((prev) => ({ ...prev, pickup: text }))
+          }
+          onChangeDropoff={(text) =>
+            setLocation((prev) => ({ ...prev, dropoff: text }))
+          }
+          onFocusField={(field) => {
+            setActiveField(field);
+            // setShowModal(true);
+          }}
           onSwapLocation={handleSwap}
         />
         <PickMapAddressBtn
@@ -71,10 +97,13 @@ export default function SendPackageScreen() {
             disabled={!isButtonEnabled}
           />
         </View>
-        <SearchLocationMapModal
-          visible={showModal}
-          onCloseModal={() => setShowModal(false)}
-        />
+        {showModal && (
+          <SearchLocationMapModal
+            visible={showModal}
+            onCloseModal={() => setShowModal(false)}
+            onChangeLocation={handleLocationChangeFromMap}
+          />
+        )}
       </View>
     </KeyboardAvoidingWrapper>
   );

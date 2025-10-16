@@ -11,12 +11,10 @@ export default function useHideTabBar() {
 
     if (!parent) return;
 
-    // Hide tab bar but preserve default style
     parent.setOptions({
       tabBarStyle: { ...defaultTabStyle, display: "none" },
     });
 
-    // Restore on unmount
     return () => {
       parent.setOptions({
         tabBarStyle: { ...defaultTabStyle, display: "flex" },
